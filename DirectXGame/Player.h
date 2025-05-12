@@ -1,19 +1,19 @@
 #pragma once
-#include <KamataEngine.h>
-#include <3d/Model.h>
-#include <3d/WorldTransform.h>
-using namespace KamataEngine;
+#include "KamataEngine.h"
+
 class Player {
-private:
-	WorldTransform worldTransform_;
-	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0u;
-	Camera* camera_ = nullptr;
-
 public:
-	void Initialize(Model*model,uint32_t textureHandle,Camera*camera);
-
+	// 初期化関数
+	void Initialize(KamataEngine::Model* model, uint32_t texturHandle, KamataEngine::Camera* camera);
+	// 更新関数
 	void Update();
-
+	// 描画関数
 	void Draw();
+	// ワールド変換データ
+	KamataEngine::WorldTransform worldTransform_;
+	// モデル
+	KamataEngine::Model* model_ = nullptr;
+	// テクスチャハンドル
+	uint32_t texturHandle_ = 0u;
+	KamataEngine::Camera* camera_ = nullptr;
 };
