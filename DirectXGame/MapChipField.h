@@ -1,27 +1,7 @@
 #pragma once
-class MapChipField {
-	static inline const float kBlockWidth = 1.0f;
-	static inline const float kBlockHeight = 1.0f;
+#include <KamataEngine.h>
 
-	static inline const uint32_t kNumBlockVirtical = 20;
-	static inline const uint32_t kNumBlockHorizontal = 100;
-
-	MapChipData mapChipData_;
-
-	void ResetMapChipData() { 
-		mapChipData_.data.clear();
-		mapChipData_.data.resize(kNumBlockVirtical);
-		for (std::_Adjust_manually_vector_aligned<MapChipType>& mapChipDataLine : mapChipDataLine : mapChipData_.data) {
-			mapChipDataLine.resize(kNumBlockHorizontal);
-		}
-	}
-	void LoadMapChipCsv(const std::string& filePath);
-
-	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
-
-	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
-	return Vector3(kBlockwidth * xIndex, kBlockHeight*(kNumBlockVirical - 1 - yIndex), 0);
-};
+using namespace KamataEngine;
 
 enum class MapChipType {
 	kBlank,
@@ -29,5 +9,28 @@ enum class MapChipType {
 };
 
 struct MapChipData {
-	std::vector<std::vector<MapChipType>>data
+	std::vector<std::vector<MapChipType>> data;
+};
+
+class MapChipField {
+public:
+	// 1ブロックのサイズ
+	static inline const float kBlockWidth = 1.0f;
+	static inline const float kBlockHeight = 1.0f;
+	// ブロックの個数
+	static inline const uint32_t kNumBlockVirtical = 20;
+	static inline const uint32_t kNumBlockHorizontal = 100;
+
+	MapChipData mapChipData_;
+
+	void ResetMapChipData();
+
+	void LoadMapChipCsv(const std::string& filePath);
+
+	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
+
+	KamataEngine::Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+
+	uint32_t GetNumBlockVirtical() const { return kNumBlockVirtical; }
+	uint32_t GetNumBlockHorizontal() const { return kNumBlockHorizontal; }
 };

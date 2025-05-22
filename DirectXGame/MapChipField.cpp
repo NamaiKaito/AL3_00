@@ -2,10 +2,9 @@
 #include<map>
 #include<fstream>
 #include<sstream>
-std::map<std::string, MapChipType> mapChipTable = {
-	{"0",MapChipType::kBlank},
-    {"1",MapChipType::kBlock},
-}
+#include<KamataEngine.h>
+
+using namespace KamataEngine;
 
 namespace {
 	std::map<std::string, MapChipType> mapChipTable = {
@@ -13,7 +12,14 @@ namespace {
 	    {"1", MapChipType::kBlock},
 	};
 }
+void MapChipField::ResetMapChipData() {
 
+	    mapChipData_.data.clear();
+	    mapChipData_.data.resize(kNumBlockVirtical);
+	    for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
+		    mapChipDataLine.resize(kNumBlockHorizontal);
+	    }
+}
 void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 	ResetMapChipData();
 
@@ -53,4 +59,7 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex
 		return MapChipType::kBlank;
 	}
 	return mapChipData_.data[yIndex][xIndex];
+}
+Vector3 MapChipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) { 
+	return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0); 
 }
