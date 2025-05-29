@@ -3,7 +3,6 @@
 #include "MyMath.h"
 #include "Player.h"
 #include "Skydome.h"
-#include "MapChipField.h"
 
 using namespace KamataEngine;
 
@@ -28,7 +27,7 @@ void GameScene::Initialize() {
 	player_->Initialize(model_, &camera_);
 
 	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
-	modelBlock_ = Model::CreateFromOBJ("block", true);
+	
 
 	// 天球の生成
 	skyDome_ = new SkyDome();
@@ -39,32 +38,13 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
+	modelBlock_ = Model::CreateFromOBJ("block", true);
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-	void GenerateBlock();
-	{
-		uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
-		uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+	
+	GenerateBlock();
 
-		worldTransformBlocks_.resize(numBlockVirtical);
-		for (uint32_t i = 0; i < numBlockVirtical; ++i) {
-			worldTransformBlocks_[i].resize(numBlockHorizontal);
-		}
-		for (uint32_t i = 0; i < numBlockVirtical; ++i) {
-			for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
-
-				if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
-
-					WorldTransform* worldTransform = new WorldTransform();
-					worldTransform->Initialize();
-					worldTransformBlocks_[i][j] = worldTransform;
-					worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-				}
-			}
-		}
-	}
-
-//	// 要素数
+	//	// 要素数
 //	const uint32_t kNumBlockVirtical = 10;
 //	const uint32_t kNumBlockHorizontal = 20;
 //
@@ -108,11 +88,12 @@ void GameScene::Update() {
 
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 
-			if (worldTransformBlock != nullptr) {
+			if (!worldTransformBlock) {
+				continue;
+			}
 				worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 				worldTransformBlock->TransferMatrix();
-			}
-
+			
 		}
 	}
 
@@ -130,6 +111,7 @@ void GameScene::Update() {
 		debugCamera_->Update();
 		camera_.matView = debugCamera_->GetCamera().matView;
 		camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		camera_.UpdateMatrix();
 	} else {
 		camera_.UpdateMatrix();
 	}
@@ -156,7 +138,27 @@ void GameScene::Draw() {
 
 	Model::PostDraw();
 }
+void GameScene::GenerateBlock() {
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 
+	worldTransformBlocks_.resize(numBlockVirtical);
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(numBlockHorizontal);
+	}
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+}
 GameScene::~GameScene() {
 	delete model_;
 	delete modelBlock_;
