@@ -9,7 +9,7 @@ using namespace KamataEngine;
 void GameScene::Initialize() {
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("mario.png");
+	//textureHandle_ = TextureManager::Load("mario.png");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
@@ -24,7 +24,7 @@ void GameScene::Initialize() {
 
 	player_ = new Player();
 	
-	player_->Initialize(model_, &camera_);
+	
 
 	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
 	
@@ -43,6 +43,9 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	
 	GenerateBlock();
+
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
+	player_->Initialize(model_, &camera_, playerPosition);
 
 	//	// 要素数
 //	const uint32_t kNumBlockVirtical = 10;
