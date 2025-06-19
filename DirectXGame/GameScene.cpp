@@ -1,8 +1,8 @@
 #include "GameScene.h"
-#include "KamataEngine.h"
-#include "MyMath.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "KamataEngine.h"
+#include "MyMath.h"
 
 using namespace KamataEngine;
 
@@ -23,11 +23,8 @@ void GameScene::Initialize() {
 	model_ = Model::CreateFromOBJ("player", true);
 
 	player_ = new Player();
-	
-	
 
 	modelSkyDome_ = Model::CreateFromOBJ("skyDome", true);
-	
 
 	// 天球の生成
 	skyDome_ = new SkyDome();
@@ -47,8 +44,19 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
 	player_->Initialize(model_, &camera_, playerPosition);
 
+	// カメラコントローラーの生成
+	cameraController_ = new CameraController();
+	// 初期化
+	cameraController_->Initialize();
+	// 追従対象をセット
+	cameraController_->SetTarget(player_);
+	// リセット
+	cameraController_->Reset();
+
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	cameraController_->SetMovableArea(cameraArea);
 	//	// 要素数
-//	const uint32_t kNumBlockVirtical = 10;
+//	const uint32_t kNumBlockVertical = 10;
 //	const uint32_t kNumBlockHorizontal = 20;
 //
 //	// ブロック1個分の横幅
@@ -56,18 +64,18 @@ void GameScene::Initialize() {
 //	const float kBlockHeight = 2.0f;
 //
 //	// 要素数を変更する
-//	worldTransformBlocks_.resize(kNumBlockVirtical);
-//	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+//	worldTransformBlocks_.resize(kNumBlockVertical);
+//	for (uint32_t i = 0; i < kNumBlockVertical; ++i) {
 //		worldTransformBlocks_[i].resize(kNumBlockHorizontal, nullptr);
 //	}
 //
 //
-//	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+//	for (uint32_t i = 0; i < kNumBlockVertical; ++i) {
 //		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 //	}
 //
 //	// キューブの生成
-//	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
+//	for (uint32_t i = 0; i < kNumBlockVertical; i++) {
 //
 //		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
 //
@@ -91,9 +99,9 @@ void GameScene::Update() {
 
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 
-			if (!worldTransformBlock) {
+			if (!worldTransformBlock) 
 				continue;
-			}
+			
 				worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 				worldTransformBlock->TransferMatrix();
 			
@@ -117,14 +125,20 @@ void GameScene::Update() {
 		camera_.UpdateMatrix();
 	} else {
 		camera_.UpdateMatrix();
+		camera_.matView = cameraController_->GetViewProjection().matView;
+		camera_.matProjection = cameraController_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		camera_.TransferMatrix();
 	}
+	// 追従カメラの更新
+	cameraController_->Update();
 }
 
 void GameScene::Draw() {
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
-	player_->Draw();
+	
 
 	skyDome_->Draw();
 
@@ -138,18 +152,18 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
-
+player_->Draw();
 	Model::PostDraw();
 }
 void GameScene::GenerateBlock() {
-	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockVertical = mapChipField_->GetNumBlockVertical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 
-	worldTransformBlocks_.resize(numBlockVirtical);
-	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+	worldTransformBlocks_.resize(numBlockVertical);
+	for (uint32_t i = 0; i < numBlockVertical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
 	}
-	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+	for (uint32_t i = 0; i < numBlockVertical; ++i) {
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
 
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {

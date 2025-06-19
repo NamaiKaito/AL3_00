@@ -2,9 +2,9 @@
 #include "KamataEngine.h"
 #include "Player.h"
 #include "Skydome.h"
-#include"MapChipField.h"
 #include <vector>
-
+#include "MapChipField.h"
+#include "CameraController.h"
 using namespace KamataEngine;
 
 // ゲームシーン
@@ -28,8 +28,10 @@ public:
 	SkyDome* skyDome_ = nullptr;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
-	
+	CameraController* cameraController_ = nullptr;
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+	
+	
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	void GenerateBlock();
