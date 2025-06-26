@@ -13,7 +13,7 @@ void CameraController::Update() {
 	const Vector3& targetVelocity = target_->GetVelocity();
 
 	// 追従対象のワールドトランスフォームを参照
-	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
+	const WorldTransform& targetWorldTransform = target_->GetWorladTransform();
 	// 追従対象とオフセットからカメラの座標を計算
 	targetCoordinates = targetWorldTransform.translation_ + targetOffset_ + targetVelocity * kVelocityBias;
 
@@ -39,7 +39,7 @@ void CameraController::Update() {
 void CameraController::Reset() {
 
 	// 追従対象のワールドトランスフォームを参照
-	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
+	const WorldTransform& targetWorldTransform = target_->GetWorladTransform();
 	// 追従対象とオフセットからカメラの座標を計算
 	camera_.translation_ = targetWorldTransform.translation_ + targetOffset_;
 }

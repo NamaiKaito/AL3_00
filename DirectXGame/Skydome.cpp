@@ -1,16 +1,18 @@
 #include "Skydome.h"
 
-void SkyDome::Initialize(Model* model, Camera* camera) {
+void Skydome::Initialize(Model* model, Camera* camera) {
 
+	// NULLポインタチェック
 	assert(model);
+
 	model_ = model;
+
+	// 引数の内容をメンバ変数に記録
 	camera_ = camera;
 
 	worldTransform_.Initialize();
 }
 
-void SkyDome::Update() {}
+void Skydome::Update() {}
 
-void SkyDome::Draw() { 
-	model_->Draw(worldTransform_, *camera_);
-}
+void Skydome::Draw() { model_->Draw(worldTransform_, *camera_); }

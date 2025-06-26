@@ -1,9 +1,10 @@
 #define NOMINMAX
 #include "Player.h"
-#include <numbers>
-#include <algorithm>
-#include "MyMath.h"
 #include "MapChipField.h"
+#include "MyMath.h"
+#include <algorithm>
+#include <numbers>
+
 using namespace KamataEngine;
 using namespace MathUtility;
 
@@ -75,7 +76,7 @@ void Player::InputMove() {
 		}
 
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
-			velocity_ += Vector3(0, kJumpAcceleration, 0);
+			velocity_ += Vector3(0, kJumpAccleration, 0);
 		}
 
 	} else {
@@ -157,6 +158,7 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 		hit = true;
 	}
 
+	// ブロックにヒット？
 	if (hit) {
 
 		// めり込みを排除する方向に移動量を設定する
@@ -165,7 +167,7 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
 		// 天井に当たったことを記録する
-		info.ceiling = true;
+		info.ceiliing = true;
 	}
 }
 
@@ -177,7 +179,8 @@ void Player::CheckMapMove(const CollisionMapInfo& info) {
 
 void Player::CheckMapCeiling(const CollisionMapInfo& info) {
 
-	if (info.ceiling) {
+	// 天井に当たった？
+	if (info.ceiliing) {
 
 		DebugText::GetInstance()->ConsolePrintf("hitceiling\n");
 

@@ -3,7 +3,7 @@
 
 using namespace KamataEngine;
 
-class SkyDome {
+class Skydome {
 
 public:
 	// ワールド変換データ
