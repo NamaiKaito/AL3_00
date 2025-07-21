@@ -106,7 +106,7 @@ void Player::AnimateTurn() {
 void Player::CheckMapCollision(CollisionMapInfo& info) {
 
 	CheckMapCollisionUp(info);
-	// CheckMapCollisionDown(info);
+	CheckMapCollisionDown(info);
 	// CheckMapCollisionUpRight(info);
 	// CheckMapCollisionUpLeft(info);
 }
@@ -173,7 +173,7 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 // マップ衝突判定下方向
 void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 
-	// 下降あり?
+	// 下降あり
 	if (info.move.y >= 0) {
 		return;
 	}
@@ -205,7 +205,7 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 		hit = true;
 	}
 
-	// ブロックにヒット？
+	// ブロックにヒット
 	if (hit) {
 
 		// めり込みを排除する方向に移動量を設定する
@@ -213,8 +213,8 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 		// めり込み先ブロックの範囲矩形
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.y = std::min(0.0f, rect.top - worldTransform_.translation_.y + (kHeight / 2.0f + kBlank));
-		// 天井に当たったことを記録する
-		info.ceiliing = true;
+		// 床に当たったことを記録する
+		info.landing = true;
 	}
 }
 

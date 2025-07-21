@@ -113,7 +113,7 @@ public:
 	// 接地状態の切り替え処理
 	void CheckMapLanding(const CollisionMapInfo& info);
 
-	static inline const float kAttenuationLanding = 1;
+	static inline const float kAttenuationLanding = 0.5f;
 
 	// 微小な数値
 	static inline const float kGroundSearchHeight = 0.1f;
