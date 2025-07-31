@@ -1,5 +1,6 @@
 #pragma once
 #include "CameraController.h"
+#include "Enemy.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Player.h"
@@ -41,6 +42,9 @@ public:
 	// 自キャラ
 	Player* player_ = nullptr;
 
+	// 雑魚キャラ
+	std::list<Enemy*> enemies_;
+
 	// 天球
 	Skydome* skydome_ = nullptr;
 
@@ -61,6 +65,9 @@ public:
 	MapChipField* mapChipField_;
 
 	void GenerateBlocks();
+
+	// 全ての当たり判定を行う
+	void CheckAllCollision();
 
 	// デストラクタ
 	~GameScene();
