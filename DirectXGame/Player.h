@@ -36,6 +36,7 @@ public:
 	enum class LRDirection {
 		kRight,
 		kLeft,
+
 	};
 
 	LRDirection lrDirection_ = LRDirection::kRight;
@@ -53,7 +54,7 @@ public:
 	// 重力加速
 	static inline const float kGravityAcceleration = 0.1f;
 	// 最大落下速度
-	static inline const float kLimitFallSpeed = 10.0f;
+	static inline const float kLimitFallSpeed = 1.0f;
 	// ジャンプ初速
 	static inline const float kJumpAccleration = 1.0f;
 
@@ -88,8 +89,6 @@ public:
 		Vector3 move;
 	};
 
-	void CheckMapCollision(CollisionMapInfo& info);
-
 	// 角
 	enum Corner {
 		kRightBottom,
@@ -100,21 +99,31 @@ public:
 		kNumCorner
 	};
 
-	Vector3 CornerPosition(const Vector3& center, Corner corner);
-
 	void CheckMapCollisionUp(CollisionMapInfo& info);
 	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
 	static inline const float kBlank = 1.0f;
+
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
 	void CheckMapMove(const CollisionMapInfo& info);
 
 	void CheckMapCeiling(const CollisionMapInfo& info);
 
+	// 5壁に接触しているときの判定
+	void CheckMapWall(const CollisionMapInfo& info);
+
 	// 接地状態の切り替え処理
 	void CheckMapLanding(const CollisionMapInfo& info);
 
-	static inline const float kAttenuationLanding = 0.5f;
+	static inline const float kAttenuationLanding = 1;
 
 	// 微小な数値
 	static inline const float kGroundSearchHeight = 0.1f;
+
+	static inline const float kAttenuationWall = 0.5f;
 };
