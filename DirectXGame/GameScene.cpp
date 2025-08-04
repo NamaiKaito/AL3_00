@@ -4,6 +4,7 @@
 #include "MyMath.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "DeathParticles.h"
 
 using namespace KamataEngine;
 
@@ -123,6 +124,9 @@ void GameScene::Initialize() {
 
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
+
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(model_, &camera_, player_->GetWorldPosition());
 }
 
 void GameScene::Update() {

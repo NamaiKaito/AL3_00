@@ -5,6 +5,7 @@
 #include "MapChipField.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "DeathParticles.h"
 #include <vector>
 
 using namespace KamataEngine;
@@ -63,6 +64,8 @@ public:
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
+
+	DeathParticles* deathParticles_ = nullptr;
 
 	void GenerateBlocks();
 
