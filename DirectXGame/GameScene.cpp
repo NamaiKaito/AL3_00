@@ -279,7 +279,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
-
+	delete deathParticles_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}

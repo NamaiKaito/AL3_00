@@ -7,6 +7,7 @@ using namespace KamataEngine;
 class Player;
 
 class DeathParticles {
+public:
 	void Initialize(Model* model, Camera* camera, const Vector3& position);
 	void Update();
 	void Draw();

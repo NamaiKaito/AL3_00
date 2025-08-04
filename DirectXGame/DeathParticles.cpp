@@ -32,19 +32,3 @@ void DeathParticles::Draw() {
 		model_->Draw(worldTransform, *camera_);
 	}
 }
-
-// 初期化
-deathParticles_ = new DeathParticles;
-deathParticles_->Initialize(model_, &camera_, position);
-
-// 毎フレーム
-if (deathParticles_) {
-	deathParticles_->Update();
-	deathParticles_->Draw();
-}
-
-// 解放（終了時 or 寿命で）
-if (deathParticles_) {
-	delete deathParticles_;
-	deathParticles_ = nullptr;
-}
