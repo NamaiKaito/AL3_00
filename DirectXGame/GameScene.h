@@ -76,6 +76,22 @@ public:
 	// デスパーティクルのインスタンスを持たせる
 	DeathParticles* deathParticles_ = nullptr;
 
+	enum class Phase {
+		kPlay,  // ゲームプレイ
+		kDeath, // デス演出
+	};
+
+	// ゲームの現在フェーズから開始
+	Phase phase_;
+
+	// フェーズの切り替え
+	void ChangePhase();
+
+	// 終了フラグ
+	bool finished_ = false;
+
+	bool IsFinished() const { return finished_; }
+
 	// デストラクタ
 	~GameScene();
 };

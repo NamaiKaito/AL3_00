@@ -450,8 +450,8 @@ AABB Player::GetAABB() {
 
 void Player::OnCollision(const Enemy* enemy) {
 	(void)enemy;
-	// ジャンプ開始
-	velocity_ += Vector3(0.0f, 0.2f, 0.0f);
+	// デスフラグを立てる
+	isDead_ = true;
 }
 
 void Player::Update() {
@@ -460,9 +460,11 @@ void Player::Update() {
 	InputMove();
 
 	// 衝突情報を初期化
-	CollisionMapInfo collisionMapInfo;
+	CollisionMapInfo collisionMapInfo = {};
 	// 移動量に速度尾値をコピー
 	collisionMapInfo.move = velocity_;
+	collisionMapInfo.landing = false;
+	collisionMapInfo.hitWall = false;
 
 	// 2マップ衝突チェック
 	CheckMapCollision(collisionMapInfo);
@@ -521,4 +523,11 @@ void Player::Update() {
 	worldTransform_.TransferMatrix();
 }
 
-void Player::Draw() { model_->Draw(worldTransform_, *camera_); }
+void Player::Draw() {
+
+	// プレイヤーを生きている時だけ表示させる
+	if (isDead_ == false) {
+
+		model_->Draw(worldTransform_, *camera_);
+	}
+}
