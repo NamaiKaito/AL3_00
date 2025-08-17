@@ -1,10 +1,10 @@
 #include "GameScene.h"
+#include "DeathParticles.h"
 #include "Enemy.h"
 #include "KamataEngine.h"
 #include "MyMath.h"
 #include "Player.h"
 #include "Skydome.h"
-#include "DeathParticles.h"
 
 using namespace KamataEngine;
 
@@ -62,6 +62,12 @@ void GameScene::Initialize() {
 
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8, 18);
 	// enemy_->Initialize(model_, &camera_, enemyPosition);
+
+	// デスパーティクル
+	// パーティクルの3Dモデルデータの生成
+	modelParticle_ = Model::CreateFromOBJ("deathParticle", true);
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(modelParticle_, &camera_, playerPosition);
 
 	//================================================================
 	// 天球
@@ -124,9 +130,6 @@ void GameScene::Initialize() {
 
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
-
-	deathParticles_ = new DeathParticles;
-	deathParticles_->Initialize(model_, &camera_, player_->GetWorldPosition());
 }
 
 void GameScene::Update() {
@@ -137,6 +140,11 @@ void GameScene::Update() {
 	// 雑魚キャラの更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
+	}
+
+	// デスパーティクルの更新
+	if (deathParticles_) {
+		deathParticles_->Update();
 	}
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -214,6 +222,12 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 
+	// パーティクルの描画
+	if (deathParticles_) {
+
+		deathParticles_->Draw();
+	}
+
 	Model::PostDraw();
 	//=========描画終了========================================
 }
@@ -280,6 +294,7 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	delete mapChipField_;
 	delete deathParticles_;
+
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
