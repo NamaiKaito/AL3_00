@@ -2,7 +2,7 @@
 #include"KamataEngine.h"
 #include"GameScene.h"
 #include "TitleScene.h"
-using namespace KamataEngine;
+
 using namespace KamataEngine;
 
 // シーンはグローバル変数で宣言

@@ -2,6 +2,7 @@
 #include "CameraController.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
+#include "Fade.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Player.h"
@@ -77,8 +78,10 @@ public:
 	DeathParticles* deathParticles_ = nullptr;
 
 	enum class Phase {
+		kFadeIn,
 		kPlay,  // ゲームプレイ
 		kDeath, // デス演出
+		kFadeOut,
 	};
 
 	// ゲームの現在フェーズから開始
@@ -91,6 +94,9 @@ public:
 	bool finished_ = false;
 
 	bool IsFinished() const { return finished_; }
+
+	// フェード
+	Fade* fade_ = nullptr;
 
 	// デストラクタ
 	~GameScene();
