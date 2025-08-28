@@ -3,6 +3,7 @@
 #include <fstream>
 #include <map>
 #include <sstream>
+#include <cassert>
 
 using namespace KamataEngine;
 
@@ -34,7 +35,6 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 	std::ifstream file;
 	file.open(filePath);
 	assert(file.is_open());
-
 	// マップチップCSV
 	std::stringstream mapChipCsv;
 	// ファイルの内容を文字列ストリームにコピー
